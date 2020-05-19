@@ -12,6 +12,15 @@ loadEventListener();
 function loadEventListener() {
   // Add task event
   form.addEventListener('submit', addTask);
+
+  // Remove task event
+  taskList.addEventListener('click', removeTask);
+
+  // Clear task event
+  clearBtn.addEventListener('click', clearTasks);
+
+  // Filter task event
+  filter.addEventListener('keyup', filterTasks);
 }
 
 // Add Task
@@ -42,4 +51,40 @@ function addTask(e) {
   taskInput.value = '';
 
   e.preventDefault();
+}
+
+function removeTask(e) {
+  if (e.target.parentElement.classList.contains('delete-item')) {
+    // console.log(e.target);
+    if (confirm('Are You Sure?')) {
+      e.target.parentElement.parentElement.remove();
+    }
+  }
+}
+
+function clearTasks() {
+  // taskList.innerHTML = '';
+
+  // Faster
+  while (taskList.firstChild) {
+    taskList.removeChild(taskList.firstChild);
+  }
+}
+
+function filterTasks(e) {
+  const text = e.target.value.toLowerCase();
+
+  // querySelectorAll return a node list
+  // but if using getElementByClass will reutrn HTML collection
+  // which we would have to convert to an array in order to use foreach
+  document.querySelectorAll('.collection-item').forEach(function (task) {
+    const item = task.firstChild.textContent;
+    if(item.toLowerCase().indexOf(text) != -1){
+      task.style.display = 'block';
+    } else {
+      task.style.display = 'none';
+    }
+   });
+
+  // console.log(text);
 }
